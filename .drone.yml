@@ -1,8 +1,8 @@
 clone:
   git:
-    image: plugins/git # Drone 自維護的 git image
-    depath: 50 # default 也是 50，只抓 commit 前 50 的
-    tags: true # 預設 tags 不會下載下來
+    image: plugins/git
+    depath: 50
+    tags: true
 
 pipeline:
   node:
