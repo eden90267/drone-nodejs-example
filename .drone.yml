@@ -13,4 +13,10 @@ pipeline:
     image: node:8.3.0
     commands:
       - yarn install
-      - yarn test
+      - ./node_modules/.bin/mocha
+      - touch /node/a.txt
+
+  ls:
+    image: node:8.3.0
+    commands:
+      - ls -al /node/
