@@ -11,10 +11,12 @@ clone:
 pipeline:
   frontend:
     image: node:8.3.0
+    group: testing
     commands:
       - yarn install
       - ./node_modules/.bin/mocha
   backend:
     image: node:8.3.0
+    group: testing
     commands:
       - echo "backend testing"
