@@ -2,14 +2,23 @@
   "name": "drone-nodejs-example",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha test",
+    "lint": "eslint ./"
+  },
   "repository": "https://github.com/go-training/drone-nodejs-example.git",
   "author": "Bo-Yi Wu <appleboy.tw@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "mocha": "^3.5.0",
-    "redis": "^2.8.0"
+    "express": "^4.16.3",
+    "mocha": "^3.5.0"
   },
-  "scripts": {
-    "test": "mocha"
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "^1.11.1",
+    "should": "^13.2.1",
+    "supertest": "^3.0.0"
   }
 }
