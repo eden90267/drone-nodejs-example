@@ -31,7 +31,59 @@ pipeline:
         - yarn run lint
         - sleep 5
 
-rebuild-cache:
+  scp:
+    image: appleboy/drone-scp
+    host:
+      - 128.199.163.232
+#      - 128.199.163.233
+    port: 22
+    username: root
+    target: /root/drone/${DRONE_REPO}
+    secrets: [ssh_key] # 也可用 password 方式
+    source:
+#      - release.tar.gz # 多檔案的話會用 Makefile 處理壓縮相關
+      - "*.js"
+      - process.json
+      - node_modules
+      - Dockerfile
+    when:
+      branch: master
+
+  ssh-1:
+    image: appkeboy/drone-ssh
+    group: ssh
+    host:
+      - 128.199.163.232
+    port: 22
+    username: root
+    command_timeout: 120 # 整個 script 檔跑超過 120 秒就送 timeout 給你，回傳失敗，不過一般不會設定
+    secrets: [ssh_key]
+    script:
+      - . /root/.nvm/nvm.sh && nvm use 8.6.0
+      - rm -rf ${DRONE_REPO} && mkdir -p ${DRONE_REPO}
+      - cp -r drone/${DRONE_REPO}/* ${DROPE_REPO}/
+      - cd ${DRONE_REPO} && pm2 restart process.json
+    when:
+      branch: master
+
+  ssh-2:
+    image: appleboy/drone-ssh
+    group: ssh
+    host:
+      - 128.199.163.232
+    port: 22
+    username: root
+    command_timeout: 120
+    secrets: [ssh_key]
+    script:
+      - rm -rf docker/${DRONE_REPO} && mkdir -p docker/${DRONE_REPO}
+      - cp -r drone/${DRONE_REPO}/* docker/${DRONE_REPO}/
+      - cd docker/${DRONE_REPO} && docker build -t appleboy/node . && docker rm -f app && docker run -d --name app -p 8081:8080 appleboy/node
+    when:
+      branch: master
+
+
+  rebuild-cache:
     image: drillster/drone-volume-cache
     rebuild: true
     mount:
